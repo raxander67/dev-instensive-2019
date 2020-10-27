@@ -6,7 +6,10 @@ import org.junit.Assert.*
 import ru.skilbranch.devintensive.extensions.TimeUnits
 import ru.skilbranch.devintensive.extensions.add
 import ru.skilbranch.devintensive.extensions.format
+import ru.skilbranch.devintensive.extensions.humanizeDiff
 import ru.skilbranch.devintensive.models.*
+import ru.skilbranch.devintensive.utils.Utils
+import ru.skilbranch.devintensive.utils.Utils.parseFullName
 import java.util.*
 
 /**
@@ -23,7 +26,7 @@ class ExampleUnitTest {
     @Test
     fun test_instance() {
 //        val user= User("1")
-        val user2= User("2","John", "Cena")
+        val user2 = User("2", "John", "Cena")
 //        val user3= User("3", "John", "Silverhand",null,lastVisit = Date(), isOnline = true)
 
 //        user.printMe()
@@ -34,30 +37,33 @@ class ExampleUnitTest {
     }
 
     @Test
-    fun test_factory(){
+    fun test_factory() {
 //        val user=User.makeUser("John Cenad")
 //        val user1=User.makeUser("John Wick")
-        val user=User.makeUser("John Wick")
-        val user2=user.copy(id="2",lastName="Cena",lastVisit = Date())
+        val user = User.makeUser("John Wick")
+        val user2 = user.copy(id = "2", lastName = "Cena", lastVisit = Date())
         print("$user \n$user2")
     }
-    @Test
-    fun test_decomposition(){
 
-        val user=User.makeUser("John Wick")
-        fun getUserInfo()=user
-        val(id, firstName, lastName)=getUserInfo()
+    @Test
+    fun test_decomposition() {
+
+        val user = User.makeUser("John Wick")
+        fun getUserInfo() = user
+//        val (id, firstName, lastName) = getUserInfo()
+        val (id, firstName, lastName) = user
 
         println("$id, $firstName, $lastName")
         println("${user.component1()}, ${user.component2()}, ${user.component3()}")
     }
-    @Test
-    fun test_copy(){
 
-        val user=User.makeUser("John Wick")
-        val user2=user.copy(lastVisit = Date())
-        val user3=user.copy(id = "2",lastVisit = Date().add(-2,TimeUnits.SECOND))
-        val user4=user.copy(lastName = "Cena",lastVisit = Date().add(2,TimeUnits.HOUR))
+    @Test
+    fun test_copy() {
+
+        val user = User.makeUser("John Wick")
+        val user2 = user.copy(lastVisit = Date())
+        val user3 = user.copy(id = "2", lastVisit = Date().add(-2, TimeUnits.SECOND))
+        val user4 = user.copy(lastName = "Cena", lastVisit = Date().add(2, TimeUnits.HOUR))
 
         /*if(user == user2){
             println("equals data and hash ${user.hashCode()} $user \n ${user2.hashCode()} $user2")
@@ -72,25 +78,54 @@ class ExampleUnitTest {
 
         }*/
 
-        println("""
+        println(
+            """
             ${user.lastVisit?.format()}
             ${user2.lastVisit?.format()}
             ${user3.lastVisit?.format()}
             ${user4.lastVisit?.format()}
-        """.trimIndent())
+        """.trimIndent()
+        )
 
     }
-@Test
-fun test_abstract_factory(){
-    val user=User.makeUser("John Wick")
-    val txtMessage=BaseMessage.makeMessage(user, Chat("0"),payload = "any text message", type="text")
-    val imgMessage=BaseMessage.makeMessage(user, Chat("0"),payload = "any image url", type="text")
 
-    println(txtMessage.formatMessage())
-    println(imgMessage.formatMessage())
+    @Test
+    fun test_abstract_factory() {
+        val user = User.makeUser("John Wick")
+        val txtMessage =
+            BaseMessage.makeMessage(user, Chat("0"), payload = "any text message", type = "text")
+        val imgMessage =
+            BaseMessage.makeMessage(user, Chat("0"), payload = "any image url", type = "text")
+
+        println(txtMessage.formatMessage())
+        println(imgMessage.formatMessage())
 
 
+    }
+    @Test
+    fun test_parseFullName(){
 
-}
+        println(Utils.parseFullName("Uit"))
+    }
+    @Test
+    fun test_DateFormat(){
+
+        println(Date().format())
+    }
+    @Test
+    fun test_toInitials(){
+
+        println(Utils.toInitials("John",""))
+    }
+    @Test
+    fun test_toTranslite(){
+
+        println(Utils.transliteration("Саня Рахман"))
+    }
+    @Test
+    fun test_dateHumanizeDiff(){
+
+        println(Date().humanizeDiff(Date().add(2, TimeUnits.DAY)))
+    }
 
 }
